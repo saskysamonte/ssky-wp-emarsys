@@ -145,13 +145,14 @@ function ssky_wp_emarsys_newsletterform_send_api() {
 
         
         $data_encode = json_encode($data_array);
-        require_once __DIR__ . '/ssky-wp-emarsys-api-class.php';
         $ssky_wp_emarsys_api = new sSKY_WP_Emarsys_API($ssky_wp_emarsys_options['ssky_wp_emarsys_api_username'], $ssky_wp_emarsys_options['ssky_wp_emarsys_api_password']);
      
         $send_data = $ssky_wp_emarsys_api->send('POST', 'contact', $data_encode);
         $decoded = json_decode($send_data, true);
+		
+		//var_dump($decoded);
 
-        if($decoded['errorMessage'] === 'Credentials are invalid.' ){
+        if(!empty($decoded['errorMessage']) && $decoded['errorMessage'] === 'Credentials are invalid.' ){
             echo '<span style="color: red; font-weight: bold;">' . $decoded['errorMessage'] . '</span>';
             echo '<br/>';
         } else {
